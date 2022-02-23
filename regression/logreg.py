@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Feb 20 20:31:15 2022
+
+@author: anaalmonte
+"""
+
 # importing dependencies
 import numpy as np
 import pandas as pd
@@ -107,7 +115,15 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             gradients for given loss function (np.ndarray)
         """
-        pass
+        y_pred = self.make_prediction(X)
+        m = len(y)
+        #grad = (1/m) * np.dot(X.T, (y_pred - y))
+        #grad = (-(np.dot(X.T,(y-y_pred)))/m)
+        error = y - y_pred
+        ls = -X.T.dot(error)
+        grad= (1/m) * ls
+        return grad
+
     
     def loss_function(self, X, y) -> float:
         """
@@ -123,22 +139,38 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             average loss 
         """
-        pass
+   
+        y_pred = self.make_prediction(X)
+        m = len(y)
+        total_loss = - (1 / m) * np.sum(( y * np.log(y_pred)) + ((1 - y) * np.log(1 - y_pred)))
+        return total_loss
+
+
+
+    def _sigmoid(self, z):
+        return 1.0/(1 + np.e**(-z))
     
     def make_prediction(self, X) -> np.array:
         """
-        TODO: implement logistic function to get estimates (y_pred) for input
+        Implement logistic function to get estimates (y_pred) for input
         X values. The logistic function is a transformation of the linear model W.T(X)+b 
         into an "S-shaped" curve that can be used for binary classification
+
 
         Params: 
             X (np.ndarray): Set of feature values to make predictions for
 
         Returns: 
-            y_pred for given X
+            y_pred for given X: probababilities of our y being a of a certain categories
         """
+        # Addding bias term to X matrix if not already present
+        if X.shape[1] == self.num_feats:
+            X = np.hstack([X, np.ones((X.shape[0], 1))])
+        ## We pass the linear regression the sigmoid function to get the "S-shape"
+        y_pred = self._sigmoid(X.dot(self.W).flatten())
+        return y_pred
 
-        pass
+
 
 
 
