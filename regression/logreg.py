@@ -117,10 +117,11 @@ class LogisticRegression(BaseRegressor):
         """
         y_pred = self.make_prediction(X)
         m = len(y)
-        #grad = (1/m) * np.dot(X.T, (y_pred - y))
-        #grad = (-(np.dot(X.T,(y-y_pred)))/m)
+        ## Calculate normal error 
         error = y - y_pred
+        ## Similar operation from linear regression
         ls = -X.T.dot(error)
+        ## Apply the derivate which is the gradient
         grad= (1/m) * ls
         return grad
 
@@ -139,15 +140,27 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             average loss 
         """
-   
+        ## Make the prediction
         y_pred = self.make_prediction(X)
         m = len(y)
+        ## Because of the way we make our predictions y pred is probabilbily of category 0 and 
+        ## 1- y pred is probabiluty of category 1
         total_loss = - (1 / m) * np.sum(( y * np.log(y_pred)) + ((1 - y) * np.log(1 - y_pred)))
         return total_loss
 
 
 
     def _sigmoid(self, z):
+        """
+        Implement the sigmoid function, more suitable for categorical data.
+
+
+        Params: 
+           z : np.array of the linear model
+
+        Returns: 
+            Linear model after transformation. Values between 0 and 1. 
+        """
         return 1.0/(1 + np.e**(-z))
     
     def make_prediction(self, X) -> np.array:

@@ -22,6 +22,7 @@ def main():
     # for testing purposes once you've added your code
     # CAUTION: hyperparameters have not been optimized
     """
+    ## change the hyperparameters
     log_model= logreg.LogisticRegression(num_feats=6, max_iter=100, tol=0.001, learning_rate=0.4, batch_size=50)
     #log_model = logreg.LogisticRegression(num_feats=6, max_iter=10, tol=0.01, learning_rate=0.00001, batch_size=12)
     log_model.train_model(X_train, y_train, X_val, y_val)
